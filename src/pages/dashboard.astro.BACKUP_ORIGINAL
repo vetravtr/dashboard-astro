@@ -1,0 +1,356 @@
+<!doctype html>
+---
+import WalletConnectReferral from '../components/WalletConnectReferral.jsx';
+---
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>VETRA Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    *, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { height: 100%; width: 100%; }
+    body { height: 100%; width: 100%; font-family: 'Urbanist', sans-serif; background: rgb(5,1,9); color: #fff; }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+  <div style="min-height:100vh;background:rgb(5,1,9);color:#fff;padding:1.5rem">
+
+    <!-- HEADER -->
+    <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;max-width:1200px;margin-left:auto;margin-right:auto">
+      <a href="https://www.vetravtr.com" target="_blank">
+        <img src="/images/partners/vetra.svg" alt="VETRA" style="height:28px;width:auto" />
+      </a>
+      <nav style="display:none" id="desktop-nav">
+        <a href="https://www.vetravtr.com" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Home</a>
+        <a href="https://www.vetravtr.com/whitepaper" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Whitepaper</a>
+        <a href="https://www.vetravtr.com/blog" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Blog</a>
+        <a href="https://www.vetravtr.com/faq" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">FAQ</a>
+        <a href="https://www.vetravtr.com/contact" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Contact us</a>
+        <span style="color:rgba(255,255,255,0.9);font-size:0.875rem">Dashboard</span>
+      </nav>
+      <div id="wallet-btn-placeholder"><WalletConnectReferral client:only="react" /></div>
+    </header>
+
+    <!-- TICKER -->
+    <div id="ticker-wrapper" style="display:none;overflow:hidden;margin-bottom:1.5rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 0;max-width:1200px;margin-left:auto;margin-right:auto">
+      <div id="ticker-content" style="display:flex;white-space:nowrap;gap:2rem;padding:0 1rem;animation:marquee 30s linear infinite"></div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;max-width:1200px;margin-left:auto;margin-right:auto">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.8);margin-bottom:0.25rem">VTR Balance</p>
+        <p style="font-size:1rem;font-weight:700;color:#fff" id="vtr-balance">—</p>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.6)" id="vtr-usd">~$0.00 USD</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.8);margin-bottom:0.25rem">USDC Balance</p>
+        <p style="font-size:1rem;font-weight:700;color:#fff" id="usdc-balance">—</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.8);margin-bottom:0.25rem">Market Price</p>
+        <p style="font-size:1rem;font-weight:700;color:#fff" id="market-price">$—</p>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.6)" id="market-tvl">TVL: $0</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.8);margin-bottom:0.25rem">Reserves</p>
+        <p style="font-size:1rem;font-weight:700;color:#22c55e" id="reserves">$—</p>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.6)" id="reserve-ratio">Ratio: —</p>
+      </div>
+    </div>
+
+    <!-- OTC + BUYBACK -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-bottom:1.5rem;max-width:1200px;margin-left:auto;margin-right:auto">
+      <!-- OTC -->
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.5rem">
+          <p style="font-size:0.875rem;font-weight:500;color:#fff">OTC Sale (VETRA → Investor) <span style="margin-left:4px;color:rgba(255,255,255,0.3);cursor:help" title="Buy VTR directly from VETRA at 8% above weekly avg price.">ⓘ</span></p>
+          <span style="font-size:0.75rem;background:rgba(255,255,255,0.1);color:#fff;padding:2px 8px;border-radius:999px">TWAP + 8%</span>
+        </div>
+        <p style="font-size:1.125rem;font-weight:700;color:#f97316" id="otc-price">$—</p>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-top:4px">Base: <span style="cursor:help;border-bottom:1px dotted rgba(255,255,255,0.3)" title="TWAP = Time-Weighted Average Price">TWAP</span> <span id="otc-base">$—</span></p>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:12px 0" />
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:12px">
+          <p style="color:rgba(255,255,255,0.7);font-weight:500">When to use OTC?</p>
+          <p>• Buying large amounts without slippage (min $2,000)</p>
+          <p>• Guaranteed allocation at fixed price</p>
+          <p>• No gas fees on swap</p>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:12px 0" />
+        <div id="otc-connected" style="display:none">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+            <div>
+              <p style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-bottom:4px">Asset</p>
+              <select id="otc-asset" style="width:100%;height:36px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.75rem;padding:0 8px">
+                <option value="USDC" style="background:#1a1a2e">USDC</option>
+                <option value="USDT" style="background:#1a1a2e">USDT</option>
+              </select>
+            </div>
+            <div>
+              <p style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-bottom:4px">Amount (min $2K)</p>
+              <input type="number" id="otc-amount" placeholder="e.g. 10000" style="width:100%;height:36px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.75rem;padding:0 8px;outline:none" />
+            </div>
+          </div>
+          <div id="otc-summary" style="display:none;background:rgba(255,255,255,0.05);border-radius:8px;padding:12px;margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem"><span style="color:rgba(255,255,255,0.6)">You send</span><span style="color:#fff;font-weight:600" id="otc-send">$—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem"><span style="color:rgba(255,255,255,0.6)">You receive</span><span style="color:#b388ff;font-weight:600" id="otc-receive">— VTR</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem"><span style="color:rgba(255,255,255,0.6)">Network</span><span style="color:rgba(255,255,255,0.8)">Polygon</span></div>
+            <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:4px 0" />
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4)">Send to:</p>
+            <code style="display:block;font-size:10px;color:#b388ff;word-break:break-all;background:rgba(0,0,0,0.2);padding:6px;border-radius:4px">0x29F1bE1E72c031539bc22437aFde22fF765EE00e</code>
+          </div>
+          <p id="otc-min-error" style="display:none;font-size:0.75rem;color:#ef4444;margin-bottom:8px">Minimum order: $2,000</p>
+          <p id="otc-status" style="font-size:0.75rem;margin-bottom:8px"></p>
+          <button id="otc-submit" disabled style="width:100%;height:36px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.75rem;font-weight:500;cursor:pointer;opacity:0.5">Connect wallet to buy</button>
+        </div>
+        <p id="otc-disconnected" style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Connect wallet to submit OTC request.</p>
+      </div>
+
+      <!-- BUYBACK -->
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.5rem">
+          <p style="font-size:0.875rem;font-weight:500;color:#fff">Buyback Commitment <span style="margin-left:4px;color:rgba(255,255,255,0.3);cursor:help" title="Sell your VTR back to VETRA at 3% below weekly avg price.">ⓘ</span></p>
+          <span style="font-size:0.75rem;background:rgba(255,255,255,0.1);color:#fff;padding:2px 8px;border-radius:999px">TWAP - 3%</span>
+        </div>
+        <p style="font-size:1.125rem;font-weight:700;color:#a855f7" id="buyback-price">$—</p>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-top:4px">Estimated daily cap: $500 USDC</p>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:12px 0" />
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.9);margin-bottom:12px">Register your sell intent. When treasury has funds, we execute buyback in order of arrival at TWAP - 3%.</p>
+        <div id="buyback-connected" style="display:none">
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <input type="number" id="buyback-amount" placeholder="VTR Amount" style="flex:1;height:40px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);padding:0 12px;color:#fff;font-size:0.875rem;outline:none" />
+            <button id="buyback-register" disabled style="height:40px;padding:0 16px;border-radius:6px;background:#643390;border:none;color:#fff;font-size:0.875rem;font-weight:500;cursor:pointer;opacity:0.5">Register</button>
+          </div>
+          <p id="buyback-message" style="font-size:0.75rem;margin-bottom:8px"></p>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5">
+            <p id="buyback-queue">Intents in queue: —</p>
+            <p id="buyback-total">Total VTR in queue: —</p>
+            <p id="buyback-position" style="display:none">Your position: #—</p>
+          </div>
+        </div>
+        <p id="buyback-disconnected" style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Connect wallet to register intent.</p>
+      </div>
+    </div>
+
+    <!-- 3 CARDS DE CONTEUDO -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-bottom:1.5rem;max-width:1200px;margin-left:auto;margin-right:auto">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;font-weight:500;color:#fff;margin-bottom:12px">NFT Pioneer Sales</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:12px">
+          <div>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.6)">Sold</p>
+            <p style="font-size:1.5rem;font-weight:700;color:#fff" id="nft-sold">—</p>
+          </div>
+          <div>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.6)" id="nft-label">Available</p>
+            <p style="font-size:1.5rem;font-weight:700;color:#fff" id="nft-balance">Unlimited</p>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:12px 0" />
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.6">Each Pioneer NFT grants 1 VTR at redemption ($0.40 target). Share the project and help grow the community.</p>
+        <a href="https://www.vetravtr.com" target="_blank" style="font-size:0.75rem;color:#b388ff;text-decoration:none;margin-top:8px;display:inline-block">Learn more →</a>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;font-weight:500;color:#fff;margin-bottom:12px">Latest Updates</p>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.5">
+          <p style="color:rgba(255,255,255,0.9);font-weight:600;margin-bottom:4px">🔷 KuCoin Broker Pro Active</p>
+          <p style="margin-bottom:12px">Referral program live — earn rebates.</p>
+          <p style="color:rgba(255,255,255,0.9);font-weight:600;margin-bottom:4px">🔷 Reserves: $100M USD</p>
+          <p style="margin-bottom:12px">333% collateralized via FT Asset Management.</p>
+          <p style="color:rgba(255,255,255,0.9);font-weight:600;margin-bottom:4px">🔷 Pool Uni V3 Active</p>
+          <p style="margin-bottom:12px">$24K TVL — range $0.28-$0.39.</p>
+        </div>
+        <a href="https://www.vetravtr.com" target="_blank" style="font-size:0.75rem;color:#b388ff;text-decoration:none">View roadmap →</a>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;font-weight:500;color:#fff;margin-bottom:12px">From the Blog</p>
+        <div id="blog-posts" style="font-size:0.75rem;color:rgba(255,255,255,0.4)">
+          <p>Loading latest posts...</p>
+        </div>
+        <a href="https://www.vetravtr.com/blog" target="_blank" style="font-size:0.75rem;color:#b388ff;text-decoration:none;margin-top:8px;display:inline-block">View all posts →</a>
+      </div>
+    </div>
+
+    <!-- BOTOES -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;max-width:1200px;margin-left:auto;margin-right:auto">
+      <button onclick="window.open('https://www.geckoterminal.com/polygon_pos/pools/0x5484C717168175cFFDd77678ecAC3A38e76c4e2B','_blank')" style="height:40px;padding:0 1rem;font-size:0.875rem;font-weight:500;color:#fff;background:#643390;border:none;border-radius:8px;cursor:pointer">GeckoTerminal VTR</button>
+      <button onclick="window.open('https://polygonscan.com/address/0xAA27bd271B01dd20CcFA079800616335416c95Fd','_blank')" style="height:40px;padding:0 1rem;font-size:0.875rem;font-weight:500;color:#fff;background:#643390;border:none;border-radius:8px;cursor:pointer">Contract (PolygonScan)</button>
+    </div>
+
+    <!-- TREASURY + ROUNDS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-bottom:1.5rem;max-width:1200px;margin-left:auto;margin-right:auto">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;font-weight:500;color:#fff;margin-bottom:12px">Treasury</p>
+        <div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:8px"><span style="color:rgba(255,255,255,0.8)">Total Supply</span><span style="font-size:0.75rem;background:rgba(255,255,255,0.1);color:#fff;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.2)">30M VTR</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:8px"><span style="color:rgba(255,255,255,0.8)">Treasury (ADM)</span><span style="color:rgba(255,255,255,0.9)">~29.42M VTR</span></div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:8px 0" />
+        <div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:rgba(255,255,255,0.8)">USDC Wallet</span><code style="font-size:0.75rem">0x29F1bE1E...</code></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem">
+        <p style="font-size:0.875rem;font-weight:500;color:#fff;margin-bottom:12px">Latest Rounds</p>
+        <div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:8px"><span style="color:rgba(255,255,255,0.8)">Round 1</span><span style="font-size:0.75rem;background:#643390;color:#fff;padding:2px 8px;border-radius:999px">200K USDT @ $0.32</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.875rem;margin-bottom:8px"><span style="color:rgba(255,255,255,0.8)">Status</span><span style="font-size:0.75rem;background:#643390;color:#fff;padding:2px 8px;border-radius:999px">Active</span></div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:8px 0" />
+        <div style="display:flex;justify-content:space-between;font-size:0.875rem"><span style="color:rgba(255,255,255,0.8)">Total VTR Committed</span><span style="color:rgba(255,255,255,0.9)">~2.8M / 30M</span></div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer style="margin-top:3rem;text-align:center;max-width:1200px;margin-left:auto;margin-right:auto">
+      <div style="display:flex;justify-content:center;align-items:center;gap:2rem;flex-wrap:wrap;margin-bottom:1rem">
+        <a href="https://www.vetravtr.com" target="_blank" style="opacity:0.4"><img src="/images/partners/vetra.svg" alt="VETRA" style="height:24px" /></a>
+        <a href="https://www.kucoin.com/r/broker/CXEMTGL5" target="_blank" style="opacity:0.4"><img src="/images/partners/kucoin.svg" alt="KuCoin" style="height:20px" /></a>
+        <a href="https://www.geckoterminal.com/polygon_pos/pools/0x5484C717168175cFFDd77678ecAC3A38e76c4e2B" target="_blank" style="opacity:0.4"><img src="/images/partners/geckoterminal.png" alt="GeckoTerminal" style="height:24px" /></a>
+        <a href="https://polygonscan.com/address/0xAA27bd271B01dd20CcFA079800616335416c95Fd" target="_blank" style="opacity:0.4"><img src="/images/partners/polygonscan.svg" alt="PolygonScan" style="height:20px" /></a>
+      </div>
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.3)">2026 Vetra, LLC. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script is:inline>
+    const API = 'http://127.0.0.1:4322';
+    let walletAddress = null;
+    let walletConnected = false;
+
+    // Mostrar nav desktop
+    document.getElementById('desktop-nav').style.display = 'flex';
+    document.getElementById('desktop-nav').style.gap = '1.5rem';
+    document.getElementById('desktop-nav').style.alignItems = 'center';
+    document.getElementById('desktop-nav').style.justifyContent = 'center';
+    document.getElementById('desktop-nav').style.flex = '1';
+
+    // Wallet connect - escuta eventos do React WalletConnect
+    window.addEventListener('wallet-connected', function(e) {
+      walletAddress = e.detail;
+      walletConnected = !!walletAddress;
+      updateWalletUI();
+      if (walletAddress) loadBalances(walletAddress);
+    });
+    window.addEventListener('wallet-disconnect', function() {
+      walletAddress = null;
+      walletConnected = false;
+      updateWalletUI();
+    });
+
+    function updateWalletUI() {
+      const show = walletConnected ? 'block' : 'none';
+      const hide = walletConnected ? 'none' : 'block';
+      document.getElementById('otc-connected').style.display = show;
+      document.getElementById('otc-disconnected').style.display = hide;
+      document.getElementById('buyback-connected').style.display = show;
+      document.getElementById('buyback-disconnected').style.display = hide;
+      const otcBtn = document.getElementById('otc-submit');
+      const bbBtn = document.getElementById('buyback-register');
+      otcBtn.disabled = !walletConnected;
+      otcBtn.style.opacity = walletConnected ? '1' : '0.5';
+      otcBtn.textContent = walletConnected ? 'Submit OTC Request' : 'Connect wallet to buy';
+      bbBtn.disabled = !walletConnected;
+      bbBtn.style.opacity = walletConnected ? '1' : '0.5';
+    }
+
+    // Load market data
+    async function loadMarket() {
+      try {
+        const r = await fetch('https://api.dexscreener.com/latest/dex/pairs/polygon/0x5484C717168175cFFDd77678ecAC3A38e76c4e2B');
+        const d = await r.json();
+        if (d.pair) {
+          const price = parseFloat(d.pair.priceUsd) || 0;
+          const tvl = parseFloat(d.pair.liquidity?.usd) || 0;
+          const twap = price;
+          const otcPrice = twap * 1.08;
+          const buybackPrice = twap * 0.97;
+          document.getElementById('market-price').textContent = price ? '$' + price.toFixed(4) : '$—';
+          document.getElementById('market-tvl').textContent = 'TVL: $' + (tvl ? tvl.toLocaleString() : '0');
+          document.getElementById('otc-price').textContent = otcPrice ? '$' + otcPrice.toFixed(4) : '$—';
+          document.getElementById('buyback-price').textContent = buybackPrice ? '$' + buybackPrice.toFixed(4) : '$—';
+          document.getElementById('otc-base').textContent = twap ? '$' + twap.toFixed(4) : '$—';
+          loadTicker(price);
+        }
+      } catch(e) {}
+    }
+
+    // Load ticker
+    async function loadTicker(marketPrice) {
+      try {
+        const ids = 'bitcoin,ethereum,solana,polgon,chainlink,uniswap,usd-coin,tether,dai,vetra';
+        const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + ids + '&vs_currencies=usd&include_24hr_change=true');
+        const d = await r.json();
+        const coins = [
+          { id: 'bitcoin', symbol: 'BTC' }, { id: 'ethereum', symbol: 'ETH' }, { id: 'solana', symbol: 'SOL' },
+          { id: 'polgon', symbol: 'POL' }, { id: 'chainlink', symbol: 'LINK' }, { id: 'uniswap', symbol: 'UNI' },
+          { id: 'usd-coin', symbol: 'USDC' }, { id: 'tether', symbol: 'USDT' }, { id: 'dai', symbol: 'DAI' },
+          { id: 'vetra', symbol: 'VTR' },
+        ];
+        const prices = coins.map(c => ({ ...c, price: d[c.id]?.usd || 0, change24h: d[c.id]?.usd_24h_change || 0 }));
+        prices[9].price = marketPrice || 0.32;
+        const ticker = document.getElementById('ticker-content');
+        document.getElementById('ticker-wrapper').style.display = 'block';
+        ticker.innerHTML = prices.concat(prices).map((c, i) =>
+          '<div style="display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:8px;' + (c.symbol === 'VTR' ? 'background:rgba(100,51,144,0.2);border:1px solid rgba(100,51,144,0.3)' : '') + '">' +
+          '<span style="font-size:0.875rem;font-weight:600;' + (c.symbol === 'VTR' ? 'color:#b388ff' : 'color:rgba(255,255,255,0.8)') + '">' + c.symbol + '</span>' +
+          '<span style="font-size:0.875rem;font-family:monospace">$' + c.price.toFixed(c.price < 1 ? (c.price < 0.01 ? 6 : 4) : 2) + '</span>' +
+          '<span style="font-size:0.75rem;' + (c.change24h >= 0 ? 'color:#22c55e' : 'color:#ef4444') + '">' + (c.change24h >= 0 ? '+' : '') + c.change24h.toFixed(2) + '%</span>' +
+          '</div>'
+        ).join('');
+      } catch(e) {}
+    }
+
+    // Load reserves
+    async function loadReserves() {
+      try {
+        const r = await fetch(API + '/api/lastro');
+        const d = await r.json();
+        if (d.balance) {
+          document.getElementById('reserves').textContent = '$' + (d.balanceFormatted || (d.balance / 1e6).toLocaleString());
+          document.getElementById('reserve-ratio').textContent = d.ratio ? 'Ratio: ' + d.ratio + '%' : 'Ratio: —';
+        }
+      } catch(e) {}
+    }
+
+    // Load NFT sold
+    async function loadNftSold() {
+      try {
+        const r = await fetch(API + '/api/nft-sold');
+        const d = await r.json();
+        if (d.totalSold) document.getElementById('nft-sold').textContent = Number(d.totalSold).toLocaleString();
+      } catch(e) {}
+    }
+
+    // Load balances
+    async function loadBalances(addr) {
+      try {
+        const r = await fetch(API + '/api/balances', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: addr }),
+        });
+        const d = await r.json();
+        if (d.vtr !== undefined) {
+          document.getElementById('vtr-balance').textContent = d.vtr.toFixed(2);
+          const priceEl = document.getElementById('market-price');
+          const price = parseFloat(priceEl.textContent.replace('$', '')) || 0;
+          document.getElementById('vtr-usd').textContent = '~$' + (d.vtr * price).toFixed(2) + ' USD';
+        }
+        if (d.usdc !== undefined) document.getElementById('usdc-balance').textContent = '$' + d.usdc.toFixed(2);
+      } catch(e) {}
+    }
+
+    // Init
+    updateWalletUI();
+    loadMarket();
+    loadReserves();
+    loadNftSold();
+    setInterval(loadMarket, 60000);
+    setInterval(loadReserves, 60000);
+    setInterval(loadNftSold, 60000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>VETRA Dashboard</title>
+  <meta name="description" content="VETRA (VTR) — Dashboard de Transparência e Gestão"/>
+  <link rel="icon" href="/favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    *, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { height: 100%; width: 100%; }
+    body { height: 100%; width: 100%; font-family: 'Urbanist', sans-serif; background: rgb(5,1,9); color: #fff; }
+    input:focus { outline: 1px solid #643390; }
+  </style>
+</head>
+<body>
+  <div style="min-height:100vh;background:rgb(5,1,9);display:flex;align-items:center;justify-content:center;padding:1.5rem">
+    <div style="width:100%;max-width:400px">
+      <div id="form-container">
+        <div class="text-center mb-8">
+          <img src="/images/partners/vetra.svg" alt="VETRA" style="height:40px;width:auto;display:block;margin:0 auto 16px auto" />
+          <h1 style="font-size:1.5rem;font-weight:700;color:#fff;text-align:center">VETRA Dashboard</h1>
+          <p style="font-size:0.875rem;color:rgba(255,255,255,0.5);margin-top:4px;text-align:center">Transparency & Portfolio Management</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.5rem">
+          <div style="display:flex;margin-bottom:1rem;background:rgba(255,255,255,0.05);border-radius:8px;padding:3px">
+            <button id="tab-login" style="flex:1;padding:6px 0;font-size:0.8rem;border-radius:6px;border:none;background:#643390;color:#fff;cursor:pointer">Sign In</button>
+            <button id="tab-register" style="flex:1;padding:6px 0;font-size:0.8rem;border-radius:6px;border:none;background:transparent;color:rgba(255,255,255,0.5);cursor:pointer">Create Account</button>
+          </div>
+
+          <form id="auth-form" style="display:flex;flex-direction:column;gap:0.75rem">
+            <div id="register-fields" style="display:none;flex-direction:column;gap:0.75rem">
+              <input name="name" placeholder="Full Name *" required style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+              <input name="country" placeholder="Country *" required style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+            </div>
+            <input name="email" type="email" placeholder="Email *" required style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+            <div style="position:relative">
+              <input name="password" id="password-input" type="password" placeholder="Password *" required style="width:100%;height:40px;padding:0 36px 0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+              <button type="button" id="toggle-password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.7rem;cursor:pointer">Show</button>
+              <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:3px">Min 8 chars, 1 uppercase, 1 number, 1 special. Ex: Vetra@2026</p>
+            </div>
+            <p id="error-msg" style="font-size:0.75rem;color:#f87171;display:none;margin:0"></p>
+            <button type="submit" id="submit-btn" style="width:100%;height:40px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.8rem;font-weight:500;cursor:pointer">Sign In</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="verify-container" style="display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:2rem;text-align:center">
+        <img src="/images/partners/vetra.svg" alt="VETRA" style="height:48px;width:auto;display:block;margin:0 auto 8px auto" />
+        <h2 style="font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:8px">Check your email</h2>
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem">We sent a 6-digit code to <strong id="verify-email" style="color:rgba(255,255,255,0.8)"></strong></p>
+        <form id="verify-form" style="display:flex;flex-direction:column;gap:1rem;align-items:center">
+          <input type="text" placeholder="000000" maxlength="6" id="code-input" style="width:160px;height:48px;padding:0 16px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:1.125rem;text-align:center;letter-spacing:0.2em;font-family:monospace;outline:none" />
+          <p id="verify-error" style="font-size:0.75rem;color:#f87171;display:none"></p>
+          <button type="submit" style="width:100%;height:44px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.875rem;font-weight:500;cursor:pointer">Verify & Enter</button>
+          <button type="button" id="back-btn" style="background:none;border:none;font-size:0.75rem;color:rgba(255,255,255,0.3);cursor:pointer">Back</button>
+        </form>
+      </div>
+
+      <p style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.2);margin-top:1.5rem">2026 Vetra, LLC. All rights reserved.</p>
+    </div>
+  </div>
+
+  <script is:inline>
+    const API = window.location.hostname === 'localhost' ? '' : 'http://127.0.0.1:4322';
+    const AUTH_URL=...name === 'localhost' ? '/api/auth' : 'http://127.0.0.1:4322/api/auth';
+
+    // Elements
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const registerFields = document.getElementById('register-fields');
+    const submitBtn = document.getElementById('submit-btn');
+    const authForm = document.getElementById('auth-form');
+    const formContainer = document.getElementById('form-container');
+    const verifyContainer = document.getElementById('verify-container');
+    const verifyEmail = document.getElementById('verify-email');
+    const errorMsg = document.getElementById('error-msg');
+    const verifyError = document.getElementById('verify-error');
+    const passwordInput = document.getElementById('password-input');
+    const togglePassword = document.getElementById('toggle-password');
+    const codeInput = document.getElementById('code-input');
+    const verifyForm = document.getElementById('verify-form');
+    const backBtn = document.getElementById('back-btn');
+
+    let currentTab = 'login';
+    let currentEmail = '';
+
+    tabLogin.addEventListener('click', () => {
+      currentTab = 'login';
+      tabLogin.style.background = '#643390';
+      tabLogin.style.color = '#fff';
+      tabRegister.style.background = 'transparent';
+      tabRegister.style.color = 'rgba(255,255,255,0.5)';
+      registerFields.style.display = 'none';
+      submitBtn.textContent = 'Sign In';
+      errorMsg.style.display = 'none';
+    });
+
+    tabRegister.addEventListener('click', () => {
+      currentTab = 'register';
+      tabRegister.style.background = '#643390';
+      tabRegister.style.color = '#fff';
+      tabLogin.style.background = 'transparent';
+      tabLogin.style.color = 'rgba(255,255,255,0.5)';
+      registerFields.style.display = 'flex';
+      submitBtn.textContent = 'Create Account';
+      errorMsg.style.display = 'none';
+    });
+
+    togglePassword.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      togglePassword.textContent = isPassword ? 'Hide' : 'Show';
+    });
+
+    codeInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    });
+
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing...';
+
+      const data = { action: currentTab };
+      data.email = authForm.querySelector('[name=email]').value;
+      data.password = authForm.querySelector('[name=password]').value;
+
+      if (currentTab === 'register') {
+        data.name = authForm.querySelector('[name=name]').value;
+        data.country = authForm.querySelector('[name=country]').value;
+        const pwd = data.password;
+        if (pwd.length < 8 || !/[A-Z]/.test(pwd) || !/[0-9]/.test(pwd) || !/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) {
+          showError('Password must meet requirements (8+ chars, uppercase, number, special)');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Create Account';
+          return;
+        }
+      }
+
+      try {
+        const r = await fetch(AUTH_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const d = await r.json();
+        if (d.success) {
+          if (currentTab === 'register') {
+            await fetch('/api/send-code', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: data.email }) });
+            currentEmail = data.email;
+            verifyEmail.textContent = data.email;
+            formContainer.style.display = 'none';
+            verifyContainer.style.display = 'block';
+          } else {
+            localStorage.setItem('vetra_token', d.token);
+            localStorage.setItem('vetra_user', JSON.stringify(d.user));
+            window.location.href = '/dashboard';
+          }
+        } else {
+          showError(d.error || 'Operation failed');
+        }
+      } catch (err) {
+        showError('Connection error. Please try again.');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = currentTab === 'login' ? 'Sign In' : 'Create Account';
+    });
+
+    verifyForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      verifyError.style.display = 'none';
+      const code = codeInput.value;
+      if (code.length !== 6) return;
+      try {
+        const r = await fetch('/api/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'verify_code', email: currentEmail, code })
+        });
+        const d = await r.json();
+        if (d.success) {
+          localStorage.setItem('vetra_token', d.token);
+          localStorage.setItem('vetra_user', JSON.stringify(d.user));
+          window.location.href = '/dashboard';
+        } else {
+          verifyError.textContent = d.error || 'Invalid code';
+          verifyError.style.display = 'block';
+        }
+      } catch (err) {
+        verifyError.textContent = 'Connection error';
+        verifyError.style.display = 'block';
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      formContainer.style.display = 'block';
+      verifyContainer.style.display = 'none';
+    });
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
