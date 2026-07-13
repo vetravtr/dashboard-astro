@@ -1,0 +1,21 @@
+{
+  "name": "vetra-dashboard",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/vercel": "^9.0.4",
+    "@walletconnect/ethereum-provider": "^2.23.10",
+    "@walletconnect/modal": "^2.6.2",
+    "astro": "^5.15.5",
+    "ethers": "^6.16.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "vite-plugin-node-polyfills": "^0.28.0"
+  }
+}

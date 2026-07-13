@@ -1,0 +1,74 @@
+<!doctype html>
+---
+import WalletConnect from '../components/WalletConnect.jsx';
+---
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>VETRA - NFT Pre-Sale</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    *, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { height: 100%; width: 100%; }
+    body { height: 100%; width: 100%; font-family: 'Urbanist', sans-serif; background: rgb(5,1,9); color: #fff; }
+  </style>
+</head>
+<body>
+  <div style="min-height:100vh;background:rgb(5,1,9);color:#fff;padding:1.5rem">
+    
+    <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;max-width:800px;margin-left:auto;margin-right:auto">
+      <a href="https://www.vetravtr.com" target="_blank">
+        <img src="/images/partners/vetra.svg" alt="VETRA" style="height:32px;width:auto" />
+      </a>
+      <nav style="display:flex;gap:1.5rem;align-items:center">
+        <a href="https://www.vetravtr.com/whitepaper" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Whitepaper</a>
+        <a href="https://www.vetravtr.com/blog" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Blog</a>
+      </nav>
+    </header>
+
+    <main style="max-width:400px;margin:0 auto;padding:2rem 0">
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:32px 36px;display:flex;flex-direction:column;gap:1.5rem">
+        
+        <div style="text-align:center">
+          <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">NFT Pre-Sale</p>
+          <h1 style="font-size:1.25rem;font-weight:700">Be one of the pioneers</h1>
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px">Buy the NFT today, exchange for 1 VTR when the price reaches $0.40</p>
+        </div>
+
+        <div style="text-align:center">
+          <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Original Price</p>
+          <p style="color:rgba(255,255,255,0.4);text-decoration:line-through;font-size:1rem">$0.40 USDC</p>
+          <p style="color:#b388ff;font-size:2rem;font-weight:700">$0.34 USDC</p>
+          <span style="display:inline-block;margin-top:4px;background:rgba(100,51,144,0.2);color:#b388ff;font-size:0.7rem;font-weight:600;padding:4px 12px;border-radius:999px">15% OFF</span>
+        </div>
+
+        <!-- WalletConnect React component - IGUAL AO SITE -->
+        <div>
+          <WalletConnect client:only="react" />
+        </div>
+
+        <div style="background:rgba(100,51,144,0.05);border:1px solid rgba(100,51,144,0.1);border-radius:12px;padding:16px;text-align:center">
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.7);line-height:1.5">
+            <strong style="color:#fff">1 NFT = 1 VTR</strong> at redemption. When the market price reaches $0.40, come back and exchange your NFT for 1 VTR.
+          </p>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 16px">
+          <span style="color:rgba(255,255,255,0.5);font-size:0.75rem;font-family:monospace">0xAA27...95Fd</span>
+          <button onclick="navigator.clipboard.writeText('0xAA27bd271B01dd20CcFA079800616335416c95Fd')" style="background:none;border:none;color:#b388ff;font-size:0.75rem;font-weight:500;cursor:pointer">COPY</button>
+        </div>
+
+      </div>
+    </main>
+
+    <footer style="text-align:center;padding:2rem 0;max-width:400px;margin:0 auto">
+      <p style="font-size:0.7rem;color:rgba(255,255,255,0.2)">2026 Vetra, LLC. All rights reserved.</p>
+    </footer>
+
+  </div>
+</body>
+</html>
