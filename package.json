@@ -11,7 +11,7 @@
     "@astrojs/react": "^5.0.7",
     "@astrojs/vercel": "^9.0.4",
     "@walletconnect/ethereum-provider": "^2.23.10",
-    "@walletconnect/modal": "^2.6.2",
+    "@walletconnect/modal": "^2.7.0",
     "astro": "^5.15.5",
     "ethers": "^6.16.0",
     "react": "^19.2.7",
