@@ -43,11 +43,23 @@
 - **Service key**: `QfvT+dDMQqloq4ztvVIfhobF8rYWbmE4O/uA3AMAKUBRkBtAYgSQChOdxj+StEyAnkxwZvGG5F57v+wZ0qHQ1A==` (só no `.env` e Vercel)
 - **SMTP_PASS**: `uups wijr tdyy tgij` (senha de app Gmail do vetraquant@gmail.com)
 
-## Fluxo de Login (NÃO usar Supabase Auth)
+## Fluxo de Login (usar Supabase Auth)
 
-1. Cadastro: `POST /rest/v1/dashboard_users` com `password_hash` (hash simples SHA256)
-2. Login: `GET /rest/v1/dashboard_users?email=eq.X` → compara hash
-3. Verificação: tabela `verification_codes` com código de 6 dígitos
+1. Cadastro: `POST /auth/v1/signup` (publishable key) → Supabase envia email de confirmação
+2. Salvar também em `dashboard_users` via REST para consulta futura
+3. Login: buscar em `dashboard_users?email=eq.X` e comparar hash
+
+## Serverless Functions
+
+**NÃO funcionam online na Vercel** (FUNCTION_INVOCATION_FAILED).
+- `/api/send-code`: só enviar email (não salvar no banco)
+- `/api/auth`: NÃO usar — fazer auth direto do frontend com publishable key
+
+## Problema Conhecido: Chave Service Key
+
+A service key `QfvT+...` (novo formato Supabase) **NÃO funciona via REST** (`fetch` direto).
+Só funciona com `@supabase/supabase-js` em backend Node.js.
+Para operações no Supabase via frontend, usar **sempre publishable key + RLS**.
 
 ## Problemas Conhecidos e Soluções
 

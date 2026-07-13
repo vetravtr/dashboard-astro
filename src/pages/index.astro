@@ -90,7 +90,7 @@
     const SUPABASE_URL = 'https://qhgxffazypogelvclyjn.supabase.co';
     const PUB_KEY = 'sb_publishable_Je35tOpdxZdXWjXC8E-Sqw_Dboyt0ei';
 
-    const h = { 'Content-Type': 'application/json', 'apikey': PUB_KEY, 'Authorization': 'Bearer ' + PUB_KEY };
+    const h = { 'Content-Type': 'application/json', 'apikey': PUB_KEY };
 
     function qs(s) { return document.getElementById(s); }
 
@@ -134,19 +134,21 @@
           showError('Password must meet requirements'); subBtn.disabled = false; subBtn.textContent = 'Create Account'; return;
         }
         try {
-          const r = await fetch(SUPABASE_URL + '/rest/v1/dashboard_users', {
+          // Cadastro via Supabase Auth (ja envia email de confirmacao automaticamente)
+          const r = await fetch(SUPABASE_URL + '/auth/v1/signup', {
             method: 'POST', headers: h,
-            body: JSON.stringify({ email, name, country, password_hash: sha256(password) }),
+            body: JSON.stringify({ email, password, data: { name } }),
           });
-          if (r.ok) {
-            const code = Math.floor(100000 + Math.random() * 900000).toString();
-            await fetch(SUPABASE_URL + '/rest/v1/verification_codes', {
+          const d = await r.json();
+          if (r.ok && d.id) {
+            // Salvar tambem na dashboard_users
+            await fetch(SUPABASE_URL + '/rest/v1/dashboard_users', {
               method: 'POST', headers: h,
-              body: JSON.stringify({ email, code, expires_at: new Date(Date.now()+15*60000).toISOString(), used: false }),
+              body: JSON.stringify({ email, name, password_hash: sha256(password) }),
             });
             curEm = email; vEm.textContent = email; fCon.style.display = 'none'; vCon.style.display = 'block';
           } else {
-            const d = await r.json(); showError(d.message || 'Registration failed');
+            showError(d.msg || d.error_description || 'Registration failed');
           }
         } catch(err) { showError('Connection error'); }
         subBtn.disabled = false; subBtn.textContent = 'Create Account'; return;

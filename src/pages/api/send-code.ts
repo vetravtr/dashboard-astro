@@ -1,27 +1,12 @@
 import type { APIRoute } from 'astro';
 
-const SUPABASE_URL = 'https://qhgxffazypogelvclyjn.supabase.co';
-const SUPABASE_KEY = 'QfvT+dDMQqloq4ztvVIfhobF8rYWbmE4O/uA3AMAKUBRkBtAYgSQChOdxj+StEyAnkxwZvGG5F57v+wZ0qHQ1A==';
-
+// SO ENVIA EMAIL - o codigo é gerado e salvo pelo frontend via REST
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { email } = await request.json();
-    if (!email) {
-      return new Response(JSON.stringify({ success: false, error: 'Email required' }), { status: 400 });
+    const { email, code } = await request.json();
+    if (!email || !code) {
+      return new Response(JSON.stringify({ success: false, error: 'Email and code required' }), { status: 400 });
     }
-
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
-    const HEADERS = {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-    };
-
-    await fetch(SUPABASE_URL + '/rest/v1/verification_codes', {
-      method: 'POST', headers: { ...HEADERS, 'Prefer': 'resolution=merge-duplicates' },
-      body: JSON.stringify({ email, code, expires_at: expiresAt, used: false }),
-    });
 
     try {
       const nodemailer = (await import('nodemailer')).default;
