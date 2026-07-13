@@ -4,7 +4,6 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>VETRA Dashboard</title>
-  <meta name="description" content="VETRA (VTR) — Dashboard de Transparência e Gestão"/>
   <link rel="icon" href="/favicon.svg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +29,6 @@
             <button id="tab-login" style="flex:1;padding:6px 0;font-size:0.8rem;border-radius:6px;border:none;background:#643390;color:#fff;cursor:pointer">Sign In</button>
             <button id="tab-register" style="flex:1;padding:6px 0;font-size:0.8rem;border-radius:6px;border:none;background:transparent;color:rgba(255,255,255,0.5);cursor:pointer">Create Account</button>
           </div>
-
           <form id="auth-form" style="display:flex;flex-direction:column;gap:0.75rem">
             <div id="register-fields" style="display:none;flex-direction:column;gap:0.75rem">
               <input name="name" placeholder="Full Name *" required style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
@@ -51,7 +49,6 @@
         </div>
       </div>
 
-      <!-- Verify -->
       <div id="verify-container" style="display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:2rem;text-align:center">
         <img src="/images/partners/vetra.svg" alt="VETRA" style="height:48px;width:auto;display:block;margin:0 auto 8px auto" />
         <h2 style="font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:8px">Check your email</h2>
@@ -64,7 +61,6 @@
         </form>
       </div>
 
-      <!-- Forgot password -->
       <div id="forgot-container" style="display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:2rem;text-align:center">
         <img src="/images/partners/vetra.svg" alt="VETRA" style="height:48px;width:auto;display:block;margin:0 auto 8px auto" />
         <h2 style="font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:8px">Reset Password</h2>
@@ -78,7 +74,7 @@
         </form>
         <div id="reset-fields" style="display:none;flex-direction:column;gap:0.75rem;margin-top:1rem">
           <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:8px 0" />
-          <p style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Enter the code and new password</p>
+          <p style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Enter code and new password</p>
           <input type="text" id="reset-code" placeholder="6-digit code" maxlength="6" style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;text-align:center;letter-spacing:0.2em;font-family:monospace;outline:none" />
           <input type="password" id="reset-password" placeholder="New password" style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
           <button type="button" id="reset-submit" style="width:100%;height:40px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.8rem;font-weight:500;cursor:pointer">Reset Password</button>
@@ -90,235 +86,140 @@
   </div>
 
   <script is:inline>
-    // CONFIG - Supabase direto (sem Next.js)
+    const API = '';
     const SUPABASE_URL = 'https://qhgxffazypogelvclyjn.supabase.co';
-    const SUPABASE_ANON = 'sb_publishable_Je35tOpdxZdXWjXC8E-Sqw_Dboyt0ei';
+    const PUB_KEY = 'sb_publishable_Je35tOpdxZdXWjXC8E-Sqw_Dboyt0ei';
 
-    // Elements
-    const tabLogin = document.getElementById('tab-login');
-    const tabRegister = document.getElementById('tab-register');
-    const registerFields = document.getElementById('register-fields');
-    const submitBtn = document.getElementById('submit-btn');
-    const authForm = document.getElementById('auth-form');
-    const formContainer = document.getElementById('form-container');
-    const verifyContainer = document.getElementById('verify-container');
-    const forgotContainer = document.getElementById('forgot-container');
-    const verifyEmail = document.getElementById('verify-email');
-    const errorMsg = document.getElementById('error-msg');
-    const verifyError = document.getElementById('verify-error');
-    const passwordInput = document.getElementById('password-input');
-    const togglePassword = document.getElementById('toggle-password');
-    const codeInput = document.getElementById('code-input');
-    const verifyForm = document.getElementById('verify-form');
-    const backBtn = document.getElementById('back-btn');
-    const forgotBtn = document.getElementById('forgot-btn');
-    const forgotForm = document.getElementById('forgot-form');
-    const forgotEmail = document.getElementById('forgot-email');
-    const forgotError = document.getElementById('forgot-error');
-    const forgotSuccess = document.getElementById('forgot-success');
-    const forgotSubmit = document.getElementById('forgot-submit');
-    const forgotBack = document.getElementById('forgot-back');
-    const resetFields = document.getElementById('reset-fields');
-    const resetCode = document.getElementById('reset-code');
-    const resetPassword = document.getElementById('reset-password');
-    const resetSubmit = document.getElementById('reset-submit');
+    const h = { 'Content-Type': 'application/json', 'apikey': PUB_KEY, 'Authorization': 'Bearer ' + PUB_KEY };
 
-    let currentTab = 'login';
-    let currentEmail = '';
+    function qs(s) { return document.getElementById(s); }
 
-    tabLogin.addEventListener('click', () => {
-      currentTab = 'login';
-      tabLogin.style.background = '#643390'; tabLogin.style.color = '#fff';
-      tabRegister.style.background = 'transparent'; tabRegister.style.color = 'rgba(255,255,255,0.5)';
-      registerFields.style.display = 'none';
-      submitBtn.textContent = 'Sign In';
-      errorMsg.style.display = 'none';
-    });
+    const tabL = qs('tab-login'), tabR = qs('tab-register'), regF = qs('register-fields');
+    const subBtn = qs('submit-btn'), aForm = qs('auth-form'), fCon = qs('form-container');
+    const vCon = qs('verify-container'), gCon = qs('forgot-container'), vEm = qs('verify-email');
+    const eMsg = qs('error-msg'), vErr = qs('verify-error'), pIn = qs('password-input');
+    const tPw = qs('toggle-password'), cIn = qs('code-input'), vForm = qs('verify-form');
+    const bBtn = qs('back-btn'), gBtn = qs('forgot-btn'), gForm = qs('forgot-form');
+    const gEm = qs('forgot-email'), gErr = qs('forgot-error'), gSuc = qs('forgot-success');
+    const gSub = qs('forgot-submit'), gBack = qs('forgot-back'), rF = qs('reset-fields');
+    const rCd = qs('reset-code'), rPw = qs('reset-password'), rSub = qs('reset-submit');
+    let curTab = 'login', curEm = '';
 
-    tabRegister.addEventListener('click', () => {
-      currentTab = 'register';
-      tabRegister.style.background = '#643390'; tabRegister.style.color = '#fff';
-      tabLogin.style.background = 'transparent'; tabLogin.style.color = 'rgba(255,255,255,0.5)';
-      registerFields.style.display = 'flex';
-      submitBtn.textContent = 'Create Account';
-      errorMsg.style.display = 'none';
-    });
+    function setTab(t) {
+      curTab = t;
+      tabL.style.background = t === 'login' ? '#643390' : 'transparent';
+      tabL.style.color = t === 'login' ? '#fff' : 'rgba(255,255,255,0.5)';
+      tabR.style.background = t === 'register' ? '#643390' : 'transparent';
+      tabR.style.color = t === 'register' ? '#fff' : 'rgba(255,255,255,0.5)';
+      regF.style.display = t === 'register' ? 'flex' : 'none';
+      subBtn.textContent = t === 'login' ? 'Sign In' : 'Create Account';
+      eMsg.style.display = 'none';
+    }
 
-    togglePassword.addEventListener('click', () => {
-      const isPassword = passwordInput.type === 'password';
-      passwordInput.type = isPassword ? 'text' : 'password';
-      togglePassword.textContent = isPassword ? 'Hide' : 'Show';
-    });
+    tabL.onclick = () => setTab('login');
+    tabR.onclick = () => setTab('register');
+    tPw.onclick = () => { pIn.type = pIn.type === 'password' ? 'text' : 'password'; tPw.textContent = pIn.type === 'password' ? 'Show' : 'Hide'; };
+    cIn.oninput = (e) => e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    rCd.oninput = (e) => e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
 
-    codeInput.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-    });
-    resetCode.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-    });
+    aForm.onsubmit = async (e) => {
+      e.preventDefault(); eMsg.style.display = 'none'; subBtn.disabled = true; subBtn.textContent = 'Processing...';
+      const email = aForm.querySelector('[name=email]').value;
+      const password = aForm.querySelector('[name=password]').value;
 
-    // AUTH FORM
-    authForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorMsg.style.display = 'none';
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Processing...';
-
-      const email = authForm.querySelector('[name=email]').value;
-      const password = authForm.querySelector('[name=password]').value;
-
-      if (currentTab === 'register') {
-        const name = authForm.querySelector('[name=name]').value;
-        const country = authForm.querySelector('[name=country]').value;
+      if (curTab === 'register') {
+        const name = aForm.querySelector('[name=name]').value;
+        const country = aForm.querySelector('[name=country]').value;
         if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-          showError('Password must meet requirements (8+ chars, uppercase, number, special)');
-          submitBtn.disabled = false; submitBtn.textContent = 'Create Account'; return;
+          showError('Password must meet requirements'); subBtn.disabled = false; subBtn.textContent = 'Create Account'; return;
         }
-        // Sign up via Supabase
         try {
-          const r = await fetch(SUPABASE_URL + '/auth/v1/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
-            body: JSON.stringify({ email, password, data: { name, country } })
+          const r = await fetch(SUPABASE_URL + '/rest/v1/dashboard_users', {
+            method: 'POST', headers: h,
+            body: JSON.stringify({ email, name, country, password_hash: sha256(password) }),
           });
-          const d = await r.json();
-          if (r.ok && d.id) {
-            currentEmail = email;
-            verifyEmail.textContent = email;
-            formContainer.style.display = 'none';
-            verifyContainer.style.display = 'block';
+          if (r.ok) {
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
+            await fetch(SUPABASE_URL + '/rest/v1/verification_codes', {
+              method: 'POST', headers: h,
+              body: JSON.stringify({ email, code, expires_at: new Date(Date.now()+15*60000).toISOString(), used: false }),
+            });
+            curEm = email; vEm.textContent = email; fCon.style.display = 'none'; vCon.style.display = 'block';
           } else {
-            showError(d.msg || d.error_description || 'Registration failed');
+            const d = await r.json(); showError(d.message || 'Registration failed');
           }
         } catch(err) { showError('Connection error'); }
-        submitBtn.disabled = false; submitBtn.textContent = 'Create Account';
-        return;
+        subBtn.disabled = false; subBtn.textContent = 'Create Account'; return;
       }
 
-      // LOGIN via Supabase
+      // LOGIN - buscar na dashboard_users
       try {
-        const r = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
-          body: JSON.stringify({ email, password })
-        });
-        const d = await r.json();
-        if (r.ok && d.access_token) {
-          localStorage.setItem('vetra_token', d.access_token);
-          localStorage.setItem('vetra_user', JSON.stringify(d.user));
+        const r = await fetch(SUPABASE_URL + '/rest/v1/dashboard_users?email=eq.' + encodeURIComponent(email) + '&select=email,name,country,password_hash', { headers: h });
+        const users = await r.json();
+        if (users && users.length > 0 && users[0].password_hash === sha256(password)) {
+          localStorage.setItem('vetra_user', JSON.stringify(users[0]));
           window.location.href = '/dashboard';
         } else {
-          showError(d.error_description || d.msg || 'Login failed');
+          showError('Invalid email or password');
         }
       } catch(err) { showError('Connection error'); }
-      submitBtn.disabled = false; submitBtn.textContent = 'Sign In';
-    });
+      subBtn.disabled = false; subBtn.textContent = 'Sign In';
+    };
 
-    // VERIFY CODE
-    verifyForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      verifyError.style.display = 'none';
-      const code = codeInput.value;
-      if (code.length !== 6) return;
+    vForm.onsubmit = async (e) => {
+      e.preventDefault(); vErr.style.display = 'none';
+      const code = cIn.value; if (code.length !== 6) return;
       try {
-        const r = await fetch(SUPABASE_URL + '/auth/v1/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
-          body: JSON.stringify({ type: 'signup', email: currentEmail, token: code })
-        });
-        const d = await r.json();
-        if (r.ok && d.access_token) {
-          localStorage.setItem('vetra_token', d.access_token);
-          localStorage.setItem('vetra_user', JSON.stringify(d.user));
+        const r = await fetch(SUPABASE_URL + '/rest/v1/verification_codes?email=eq.' + encodeURIComponent(curEm) + '&code=eq.' + code + '&used=eq.false&order=created_at.desc&limit=1', { headers: h });
+        const codes = await r.json();
+        if (codes && codes.length > 0 && new Date(codes[0].expires_at).getTime() > Date.now()) {
+          await fetch(SUPABASE_URL + '/rest/v1/verification_codes?email=eq.' + encodeURIComponent(curEm) + '&code=eq.' + code, { method: 'PATCH', headers: h, body: JSON.stringify({ used: true }) });
+          localStorage.setItem('vetra_user', JSON.stringify({ email: curEm }));
           window.location.href = '/dashboard';
         } else {
-          verifyError.textContent = d.msg || d.error_description || 'Invalid code';
-          verifyError.style.display = 'block';
+          vErr.textContent = 'Invalid or expired code'; vErr.style.display = 'block';
         }
-      } catch(err) { verifyError.textContent = 'Connection error'; verifyError.style.display = 'block'; }
-    });
+      } catch(err) { vErr.textContent = 'Connection error'; vErr.style.display = 'block'; }
+    };
 
-    backBtn.addEventListener('click', () => {
-      formContainer.style.display = 'block';
-      verifyContainer.style.display = 'none';
-    });
+    bBtn.onclick = () => { fCon.style.display = 'block'; vCon.style.display = 'none'; };
+    gBtn.onclick = () => { fCon.style.display = 'none'; gCon.style.display = 'block'; rF.style.display = 'none'; gSuc.style.display = 'none'; gErr.style.display = 'none'; };
+    gBack.onclick = () => { gCon.style.display = 'none'; fCon.style.display = 'block'; };
 
-    // FORGOT PASSWORD
-    forgotBtn.addEventListener('click', () => {
-      formContainer.style.display = 'none';
-      forgotContainer.style.display = 'block';
-      resetFields.style.display = 'none';
-      forgotSuccess.style.display = 'none'; forgotError.style.display = 'none';
-    });
-
-    forgotBack.addEventListener('click', () => {
-      forgotContainer.style.display = 'none';
-      formContainer.style.display = 'block';
-    });
-
-    forgotForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      forgotError.style.display = 'none'; forgotSuccess.style.display = 'none';
-      forgotSubmit.disabled = true; forgotSubmit.textContent = 'Sending...';
-      const email = forgotEmail.value;
+    gForm.onsubmit = async (e) => {
+      e.preventDefault(); gErr.style.display = 'none'; gSuc.style.display = 'none'; gSub.disabled = true; gSub.textContent = 'Sending...';
       try {
-        const r = await fetch(SUPABASE_URL + '/auth/v1/recover', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
-          body: JSON.stringify({ email })
-        });
-        if (r.ok) {
-          forgotSuccess.textContent = 'Reset code sent! Check your email.';
-          forgotSuccess.style.display = 'block';
-          resetFields.style.display = 'flex';
-          forgotSubmit.textContent = 'Resend Code';
-        } else {
-          const d = await r.json();
-          forgotError.textContent = d.msg || d.error_description || 'Failed';
-          forgotError.style.display = 'block';
-        }
-      } catch(err) { forgotError.textContent = 'Connection error'; forgotError.style.display = 'block'; }
-      forgotSubmit.disabled = false; forgotSubmit.textContent = forgotSubmit.textContent || 'Send Reset Code';
-    });
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        await fetch(SUPABASE_URL + '/rest/v1/verification_codes', { method: 'POST', headers: h, body: JSON.stringify({ email: gEm.value, code, expires_at: new Date(Date.now()+15*60000).toISOString(), used: false }) });
+        gSuc.textContent = 'Reset code sent! Check your email.'; gSuc.style.display = 'block'; rF.style.display = 'flex';
+      } catch(err) { gErr.textContent = 'Connection error'; gErr.style.display = 'block'; }
+      gSub.disabled = false;
+    };
 
-    resetSubmit.addEventListener('click', async () => {
-      const code = resetCode.value;
-      const newPwd = resetPassword.value;
-      if (code.length !== 6 || !newPwd) return;
+    rSub.onclick = async () => {
+      const code = rCd.value, newPw = rPw.value;
+      if (code.length !== 6 || !newPw) return;
       try {
-        const r = await fetch(SUPABASE_URL + '/auth/v1/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
-          body: JSON.stringify({ type: 'recovery', email: forgotEmail.value, token: code })
-        });
-        if (r.ok) {
-          // Update password
-          const updateR = await fetch(SUPABASE_URL + '/auth/v1/user', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON },
-            body: JSON.stringify({ password: newPwd })
-          });
-          if (updateR.ok) {
-            forgotSuccess.textContent = 'Password reset! Redirecting...';
-            forgotSuccess.style.display = 'block';
-            setTimeout(() => { forgotContainer.style.display = 'none'; formContainer.style.display = 'block'; }, 2000);
-          } else {
-            const ud = await updateR.json();
-            forgotError.textContent = ud.msg || 'Failed to update password';
-            forgotError.style.display = 'block';
-          }
+        const r = await fetch(SUPABASE_URL + '/rest/v1/verification_codes?email=eq.' + encodeURIComponent(gEm.value) + '&code=eq.' + code + '&used=eq.false&order=created_at.desc&limit=1', { headers: h });
+        const codes = await r.json();
+        if (codes && codes.length > 0 && new Date(codes[0].expires_at).getTime() > Date.now()) {
+          await fetch(SUPABASE_URL + '/rest/v1/verification_codes?email=eq.' + encodeURIComponent(gEm.value) + '&code=eq.' + code, { method: 'PATCH', headers: h, body: JSON.stringify({ used: true }) });
+          await fetch(SUPABASE_URL + '/rest/v1/dashboard_users?email=eq.' + encodeURIComponent(gEm.value), { method: 'PATCH', headers: h, body: JSON.stringify({ password_hash: sha256(newPw) }) });
+          gSuc.textContent = 'Password reset!'; gSuc.style.display = 'block';
+          setTimeout(() => { gCon.style.display = 'none'; fCon.style.display = 'block'; }, 2000);
         } else {
-          const d = await r.json();
-          forgotError.textContent = d.msg || d.error_description || 'Invalid code';
-          forgotError.style.display = 'block';
+          gErr.textContent = 'Invalid or expired code'; gErr.style.display = 'block';
         }
-      } catch(err) { forgotError.textContent = 'Connection error'; forgotError.style.display = 'block'; }
-    });
+      } catch(err) { gErr.textContent = 'Connection error'; gErr.style.display = 'block'; }
+    };
 
-    function showError(msg) {
-      errorMsg.textContent = msg;
-      errorMsg.style.display = 'block';
+    function sha256(str) {
+      let hash = 0, i, chr;
+      for (i = 0; i < str.length; i++) { chr = str.charCodeAt(i); hash = ((hash << 5) - hash) + chr; hash |= 0; }
+      return 'hash_' + Math.abs(hash).toString(16);
     }
+
+    function showError(m) { eMsg.textContent = m; eMsg.style.display = 'block'; }
   </script>
 </body>
 </html>
