@@ -1,13 +1,11 @@
 <!doctype html>
----
-import WalletConnect from '../components/WalletConnect.jsx';
----
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>VETRA - NFT Pre-Sale</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>VETRA Dashboard</title>
+  <meta name="description" content="VETRA (VTR) — Dashboard de Transparência e Gestão"/>
+  <link rel="icon" href="/favicon.svg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300..700&display=swap" rel="stylesheet">
@@ -15,60 +13,312 @@ import WalletConnect from '../components/WalletConnect.jsx';
     *, ::before, ::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { height: 100%; width: 100%; }
     body { height: 100%; width: 100%; font-family: 'Urbanist', sans-serif; background: rgb(5,1,9); color: #fff; }
+    input:focus { outline: 1px solid #643390; }
   </style>
 </head>
 <body>
-  <div style="min-height:100vh;background:rgb(5,1,9);color:#fff;padding:1.5rem">
-    
-    <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;max-width:800px;margin-left:auto;margin-right:auto">
-      <a href="https://www.vetravtr.com" target="_blank">
-        <img src="/images/partners/vetra.svg" alt="VETRA" style="height:32px;width:auto" />
-      </a>
-      <nav style="display:flex;gap:1.5rem;align-items:center">
-        <a href="https://www.vetravtr.com/whitepaper" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Whitepaper</a>
-        <a href="https://www.vetravtr.com/blog" target="_blank" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem">Blog</a>
-      </nav>
-    </header>
-
-    <main style="max-width:400px;margin:0 auto;padding:2rem 0">
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:32px 36px;display:flex;flex-direction:column;gap:1.5rem">
-        
-        <div style="text-align:center">
-          <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">NFT Pre-Sale</p>
-          <h1 style="font-size:1.25rem;font-weight:700">Be one of the pioneers</h1>
-          <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:4px">Buy the NFT today, exchange for 1 VTR when the price reaches $0.40</p>
+  <div style="min-height:100vh;background:rgb(5,1,9);display:flex;align-items:center;justify-content:center;padding:1.5rem">
+    <div style="width:100%;max-width:400px">
+      <div id="form-container">
+        <div style="text-align:center;margin-bottom:1.5rem">
+          <img src="/images/partners/vetra.svg" alt="VETRA" style="height:40px;width:auto;display:block;margin:0 auto 16px auto" />
+          <h1 style="font-size:1.5rem;font-weight:700;color:#fff;text-align:center">VETRA Dashboard</h1>
+          <p style="font-size:0.875rem;color:rgba(255,255,255,0.5);margin-top:4px;text-align:center">Transparency & Portfolio Management</p>
         </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.5rem">
+          <div style="display:flex;margin-bottom:1rem;background:rgba(255,255,255,0.05);border-radius:8px;padding:3px">
+            <button id="tab-login" style="flex:1;padding:6px 0;font-size:0.8rem;border-radius:6px;border:none;background:#643390;color:#fff;cursor:pointer">Sign In</button>
+            <button id="tab-register" style="flex:1;padding:6px 0;font-size:0.8rem;border-radius:6px;border:none;background:transparent;color:rgba(255,255,255,0.5);cursor:pointer">Create Account</button>
+          </div>
 
-        <div style="text-align:center">
-          <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Original Price</p>
-          <p style="color:rgba(255,255,255,0.4);text-decoration:line-through;font-size:1rem">$0.40 USDC</p>
-          <p style="color:#b388ff;font-size:2rem;font-weight:700">$0.34 USDC</p>
-          <span style="display:inline-block;margin-top:4px;background:rgba(100,51,144,0.2);color:#b388ff;font-size:0.7rem;font-weight:600;padding:4px 12px;border-radius:999px">15% OFF</span>
+          <form id="auth-form" style="display:flex;flex-direction:column;gap:0.75rem">
+            <div id="register-fields" style="display:none;flex-direction:column;gap:0.75rem">
+              <input name="name" placeholder="Full Name *" required style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+              <input name="country" placeholder="Country *" required style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+            </div>
+            <input name="email" type="email" placeholder="Email *" required style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+            <div style="position:relative">
+              <input name="password" id="password-input" type="password" placeholder="Password *" required style="width:100%;height:40px;padding:0 36px 0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+              <button type="button" id="toggle-password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.3);font-size:0.7rem;cursor:pointer">Show</button>
+              <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:3px">Min 8 chars, 1 uppercase, 1 number, 1 special</p>
+            </div>
+            <p id="error-msg" style="font-size:0.75rem;color:#f87171;display:none;margin:0"></p>
+            <button type="submit" id="submit-btn" style="width:100%;height:40px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.8rem;font-weight:500;cursor:pointer">Sign In</button>
+            <div style="text-align:center;margin-top:4px">
+              <button type="button" id="forgot-btn" style="background:none;border:none;color:#b388ff;font-size:0.75rem;cursor:pointer">Forgot your password?</button>
+            </div>
+          </form>
         </div>
-
-        <!-- WalletConnect React component - IGUAL AO SITE -->
-        <div>
-          <WalletConnect client:only="react" />
-        </div>
-
-        <div style="background:rgba(100,51,144,0.05);border:1px solid rgba(100,51,144,0.1);border-radius:12px;padding:16px;text-align:center">
-          <p style="font-size:0.8rem;color:rgba(255,255,255,0.7);line-height:1.5">
-            <strong style="color:#fff">1 NFT = 1 VTR</strong> at redemption. When the market price reaches $0.40, come back and exchange your NFT for 1 VTR.
-          </p>
-        </div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 16px">
-          <span style="color:rgba(255,255,255,0.5);font-size:0.75rem;font-family:monospace">0xAA27...95Fd</span>
-          <button onclick="navigator.clipboard.writeText('0xAA27bd271B01dd20CcFA079800616335416c95Fd')" style="background:none;border:none;color:#b388ff;font-size:0.75rem;font-weight:500;cursor:pointer">COPY</button>
-        </div>
-
       </div>
-    </main>
 
-    <footer style="text-align:center;padding:2rem 0;max-width:400px;margin:0 auto">
-      <p style="font-size:0.7rem;color:rgba(255,255,255,0.2)">2026 Vetra, LLC. All rights reserved.</p>
-    </footer>
+      <!-- Verify -->
+      <div id="verify-container" style="display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:2rem;text-align:center">
+        <img src="/images/partners/vetra.svg" alt="VETRA" style="height:48px;width:auto;display:block;margin:0 auto 8px auto" />
+        <h2 style="font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:8px">Check your email</h2>
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem">We sent a 6-digit code to <strong id="verify-email" style="color:rgba(255,255,255,0.8)"></strong></p>
+        <form id="verify-form" style="display:flex;flex-direction:column;gap:1rem;align-items:center">
+          <input type="text" placeholder="000000" maxlength="6" id="code-input" style="width:160px;height:48px;padding:0 16px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:1.125rem;text-align:center;letter-spacing:0.2em;font-family:monospace;outline:none" />
+          <p id="verify-error" style="font-size:0.75rem;color:#f87171;display:none"></p>
+          <button type="submit" style="width:100%;height:44px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.875rem;font-weight:500;cursor:pointer">Verify & Enter</button>
+          <button type="button" id="back-btn" style="background:none;border:none;font-size:0.75rem;color:rgba(255,255,255,0.3);cursor:pointer">Back</button>
+        </form>
+      </div>
 
+      <!-- Forgot password -->
+      <div id="forgot-container" style="display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:2rem;text-align:center">
+        <img src="/images/partners/vetra.svg" alt="VETRA" style="height:48px;width:auto;display:block;margin:0 auto 8px auto" />
+        <h2 style="font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:8px">Reset Password</h2>
+        <p style="font-size:0.875rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem">Enter your email to receive a reset code</p>
+        <form id="forgot-form" style="display:flex;flex-direction:column;gap:0.75rem">
+          <input type="email" id="forgot-email" placeholder="Your email *" style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+          <p id="forgot-error" style="font-size:0.75rem;color:#f87171;display:none"></p>
+          <p id="forgot-success" style="font-size:0.75rem;color:#22c55e;display:none"></p>
+          <button type="submit" id="forgot-submit" style="width:100%;height:40px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.8rem;font-weight:500;cursor:pointer">Send Reset Code</button>
+          <button type="button" id="forgot-back" style="background:none;border:none;font-size:0.75rem;color:rgba(255,255,255,0.3);cursor:pointer;margin-top:4px">Back to Sign In</button>
+        </form>
+        <div id="reset-fields" style="display:none;flex-direction:column;gap:0.75rem;margin-top:1rem">
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:8px 0" />
+          <p style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Enter the code and new password</p>
+          <input type="text" id="reset-code" placeholder="6-digit code" maxlength="6" style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;text-align:center;letter-spacing:0.2em;font-family:monospace;outline:none" />
+          <input type="password" id="reset-password" placeholder="New password" style="width:100%;height:40px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:0.8rem;outline:none" />
+          <button type="button" id="reset-submit" style="width:100%;height:40px;border-radius:8px;background:#643390;border:none;color:#fff;font-size:0.8rem;font-weight:500;cursor:pointer">Reset Password</button>
+        </div>
+      </div>
+
+      <p style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.2);margin-top:1.5rem">2026 Vetra, LLC. All rights reserved.</p>
+    </div>
   </div>
+
+  <script is:inline>
+    // CONFIG - Supabase direto (sem Next.js)
+    const SUPABASE_URL = 'https://qhgxffazypogelvclyjn.supabase.co';
+    const SUPABASE_ANON = 'sb_publishable_Je35tOpdxZdXWjXC8E-Sqw_Dboyt0ei';
+
+    // Elements
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const registerFields = document.getElementById('register-fields');
+    const submitBtn = document.getElementById('submit-btn');
+    const authForm = document.getElementById('auth-form');
+    const formContainer = document.getElementById('form-container');
+    const verifyContainer = document.getElementById('verify-container');
+    const forgotContainer = document.getElementById('forgot-container');
+    const verifyEmail = document.getElementById('verify-email');
+    const errorMsg = document.getElementById('error-msg');
+    const verifyError = document.getElementById('verify-error');
+    const passwordInput = document.getElementById('password-input');
+    const togglePassword = document.getElementById('toggle-password');
+    const codeInput = document.getElementById('code-input');
+    const verifyForm = document.getElementById('verify-form');
+    const backBtn = document.getElementById('back-btn');
+    const forgotBtn = document.getElementById('forgot-btn');
+    const forgotForm = document.getElementById('forgot-form');
+    const forgotEmail = document.getElementById('forgot-email');
+    const forgotError = document.getElementById('forgot-error');
+    const forgotSuccess = document.getElementById('forgot-success');
+    const forgotSubmit = document.getElementById('forgot-submit');
+    const forgotBack = document.getElementById('forgot-back');
+    const resetFields = document.getElementById('reset-fields');
+    const resetCode = document.getElementById('reset-code');
+    const resetPassword = document.getElementById('reset-password');
+    const resetSubmit = document.getElementById('reset-submit');
+
+    let currentTab = 'login';
+    let currentEmail = '';
+
+    tabLogin.addEventListener('click', () => {
+      currentTab = 'login';
+      tabLogin.style.background = '#643390'; tabLogin.style.color = '#fff';
+      tabRegister.style.background = 'transparent'; tabRegister.style.color = 'rgba(255,255,255,0.5)';
+      registerFields.style.display = 'none';
+      submitBtn.textContent = 'Sign In';
+      errorMsg.style.display = 'none';
+    });
+
+    tabRegister.addEventListener('click', () => {
+      currentTab = 'register';
+      tabRegister.style.background = '#643390'; tabRegister.style.color = '#fff';
+      tabLogin.style.background = 'transparent'; tabLogin.style.color = 'rgba(255,255,255,0.5)';
+      registerFields.style.display = 'flex';
+      submitBtn.textContent = 'Create Account';
+      errorMsg.style.display = 'none';
+    });
+
+    togglePassword.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      togglePassword.textContent = isPassword ? 'Hide' : 'Show';
+    });
+
+    codeInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    });
+    resetCode.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    });
+
+    // AUTH FORM
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing...';
+
+      const email = authForm.querySelector('[name=email]').value;
+      const password = authForm.querySelector('[name=password]').value;
+
+      if (currentTab === 'register') {
+        const name = authForm.querySelector('[name=name]').value;
+        const country = authForm.querySelector('[name=country]').value;
+        if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+          showError('Password must meet requirements (8+ chars, uppercase, number, special)');
+          submitBtn.disabled = false; submitBtn.textContent = 'Create Account'; return;
+        }
+        // Sign up via Supabase
+        try {
+          const r = await fetch(SUPABASE_URL + '/auth/v1/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+            body: JSON.stringify({ email, password, data: { name, country } })
+          });
+          const d = await r.json();
+          if (r.ok && d.id) {
+            currentEmail = email;
+            verifyEmail.textContent = email;
+            formContainer.style.display = 'none';
+            verifyContainer.style.display = 'block';
+          } else {
+            showError(d.msg || d.error_description || 'Registration failed');
+          }
+        } catch(err) { showError('Connection error'); }
+        submitBtn.disabled = false; submitBtn.textContent = 'Create Account';
+        return;
+      }
+
+      // LOGIN via Supabase
+      try {
+        const r = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+          body: JSON.stringify({ email, password })
+        });
+        const d = await r.json();
+        if (r.ok && d.access_token) {
+          localStorage.setItem('vetra_token', d.access_token);
+          localStorage.setItem('vetra_user', JSON.stringify(d.user));
+          window.location.href = '/dashboard';
+        } else {
+          showError(d.error_description || d.msg || 'Login failed');
+        }
+      } catch(err) { showError('Connection error'); }
+      submitBtn.disabled = false; submitBtn.textContent = 'Sign In';
+    });
+
+    // VERIFY CODE
+    verifyForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      verifyError.style.display = 'none';
+      const code = codeInput.value;
+      if (code.length !== 6) return;
+      try {
+        const r = await fetch(SUPABASE_URL + '/auth/v1/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+          body: JSON.stringify({ type: 'signup', email: currentEmail, token: code })
+        });
+        const d = await r.json();
+        if (r.ok && d.access_token) {
+          localStorage.setItem('vetra_token', d.access_token);
+          localStorage.setItem('vetra_user', JSON.stringify(d.user));
+          window.location.href = '/dashboard';
+        } else {
+          verifyError.textContent = d.msg || d.error_description || 'Invalid code';
+          verifyError.style.display = 'block';
+        }
+      } catch(err) { verifyError.textContent = 'Connection error'; verifyError.style.display = 'block'; }
+    });
+
+    backBtn.addEventListener('click', () => {
+      formContainer.style.display = 'block';
+      verifyContainer.style.display = 'none';
+    });
+
+    // FORGOT PASSWORD
+    forgotBtn.addEventListener('click', () => {
+      formContainer.style.display = 'none';
+      forgotContainer.style.display = 'block';
+      resetFields.style.display = 'none';
+      forgotSuccess.style.display = 'none'; forgotError.style.display = 'none';
+    });
+
+    forgotBack.addEventListener('click', () => {
+      forgotContainer.style.display = 'none';
+      formContainer.style.display = 'block';
+    });
+
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      forgotError.style.display = 'none'; forgotSuccess.style.display = 'none';
+      forgotSubmit.disabled = true; forgotSubmit.textContent = 'Sending...';
+      const email = forgotEmail.value;
+      try {
+        const r = await fetch(SUPABASE_URL + '/auth/v1/recover', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+          body: JSON.stringify({ email })
+        });
+        if (r.ok) {
+          forgotSuccess.textContent = 'Reset code sent! Check your email.';
+          forgotSuccess.style.display = 'block';
+          resetFields.style.display = 'flex';
+          forgotSubmit.textContent = 'Resend Code';
+        } else {
+          const d = await r.json();
+          forgotError.textContent = d.msg || d.error_description || 'Failed';
+          forgotError.style.display = 'block';
+        }
+      } catch(err) { forgotError.textContent = 'Connection error'; forgotError.style.display = 'block'; }
+      forgotSubmit.disabled = false; forgotSubmit.textContent = forgotSubmit.textContent || 'Send Reset Code';
+    });
+
+    resetSubmit.addEventListener('click', async () => {
+      const code = resetCode.value;
+      const newPwd = resetPassword.value;
+      if (code.length !== 6 || !newPwd) return;
+      try {
+        const r = await fetch(SUPABASE_URL + '/auth/v1/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON },
+          body: JSON.stringify({ type: 'recovery', email: forgotEmail.value, token: code })
+        });
+        if (r.ok) {
+          // Update password
+          const updateR = await fetch(SUPABASE_URL + '/auth/v1/user', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON },
+            body: JSON.stringify({ password: newPwd })
+          });
+          if (updateR.ok) {
+            forgotSuccess.textContent = 'Password reset! Redirecting...';
+            forgotSuccess.style.display = 'block';
+            setTimeout(() => { forgotContainer.style.display = 'none'; formContainer.style.display = 'block'; }, 2000);
+          } else {
+            const ud = await updateR.json();
+            forgotError.textContent = ud.msg || 'Failed to update password';
+            forgotError.style.display = 'block';
+          }
+        } else {
+          const d = await r.json();
+          forgotError.textContent = d.msg || d.error_description || 'Invalid code';
+          forgotError.style.display = 'block';
+        }
+      } catch(err) { forgotError.textContent = 'Connection error'; forgotError.style.display = 'block'; }
+    });
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = 'block';
+    }
+  </script>
 </body>
 </html>
